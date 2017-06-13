@@ -286,6 +286,18 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
   
   BOOL isJSNavigation = [scheme isEqualToString:RCTJSNavigationScheme];
   
+  if ([scheme isEqualToString:@"plaidlink"]) {
+    UIApplication *app = [UIApplication sharedApplication];
+
+    if ([app canOpenURL:url]) {
+      [app openURL:url];
+
+      decisionHandler(WKNavigationActionPolicyCancel);
+
+      return;
+    }
+  }
+
   // skip this for the JS Navigation handler
   if (!isJSNavigation && _onShouldStartLoadWithRequest) {
     NSMutableDictionary<NSString *, id> *event = [self baseEvent];
